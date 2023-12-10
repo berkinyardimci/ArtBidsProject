@@ -1,0 +1,7 @@
+dependencies{
+    implementation libs.springBootMailSender
+    implementation libs.kafkaImplementation
+    implementation libs.kafkaSpring
+    implementation libs.springBootMailSender
+    implementation libs.freemaker
+}
