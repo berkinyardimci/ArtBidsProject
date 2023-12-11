@@ -17,6 +17,10 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
 
+    @ExceptionHandler(AuctionNameAlreadyTakenException.class)
+    public ResponseEntity<BaseResponse> handleAuctionNameAlreadyTakenException(AuctionNameAlreadyTakenException ex) {
+        return getBaseResponseResponseEntity(ex.toString(), ex.getErrorMessage());
+    }
     @ExceptionHandler(AuctionNotFoundException.class)
     public ResponseEntity<BaseResponse> handleAuctionNotFoundException(AuctionNotFoundException ex) {
         return getBaseResponseResponseEntity(ex.toString(), ex.getErrorMessage());

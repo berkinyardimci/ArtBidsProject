@@ -29,4 +29,9 @@ public class UserProfileController {
         response.setRestHeader(new RestHeader(true, "Userlar Listelendi",null));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @GetMapping("/getUserIdFromToken/{token}")
+    public Long getUserIdFromUserProfileWithToken(@PathVariable String token){
+        return userProfileService.getUserIdFromUserProfileWithToken(token);
+    }
 }

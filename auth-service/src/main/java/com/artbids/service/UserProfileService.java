@@ -9,6 +9,7 @@ import com.artbids.data.response.userprofile.FindAllUserResponse;
 import com.artbids.data.response.userprofile.UpdateUserProfileResponse;
 import com.artbids.entity.UserProfile;
 import com.artbids.entity.enums.EStatus;
+import com.artbids.exception.InvalidTokenException;
 import com.artbids.exception.UserNotFoundException;
 import com.artbids.repository.IUserProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -65,4 +66,7 @@ public class UserProfileService {
         return Convertor.toFindAllUserResponse(activeUserProfiles);
     }
 
+    public Long getUserIdFromUserProfileWithToken(String token) {
+        return jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new InvalidTokenException("Geçersiz Token"));
+    }
 }
