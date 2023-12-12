@@ -2,6 +2,7 @@ package com.artbids.entity;
 
 
 import com.artbids.entity.enums.Status;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +32,8 @@ public class Auction {
     @Builder.Default
     private Status status = Status.PENDING;
 
-    @OneToMany
+    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<AuctionItem> auctionItems;
 
 

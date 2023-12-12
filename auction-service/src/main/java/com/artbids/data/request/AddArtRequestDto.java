@@ -1,7 +1,5 @@
-package com.artbids.entity;
+package com.artbids.data.request;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-public class AuctionItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class AddArtRequestDto {
 
     private String productName;
     private String productDescription;
@@ -24,10 +18,5 @@ public class AuctionItem {
     private String artistDescription;
     private Integer priceIncreaseRate;
     private String image;
-
-    @ManyToOne
-    @JoinColumn(name = "auction_id")
-    @JsonBackReference
-    private Auction auction;
 
 }
