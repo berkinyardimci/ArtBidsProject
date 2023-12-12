@@ -2,4 +2,5 @@ rootProject.name = 'ArtBidsBackend'
 include 'auction-service'
 include 'auth-service'
 include 'mail-service'
+include 'config-server'
 
