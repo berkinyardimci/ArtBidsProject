@@ -1,15 +1,8 @@
-server:
-  port: 8081
-
 spring:
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: berkinyardimci98@gmail.com
-    password: gvha safh mgqc jahe
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+  cloud:
+    config:
+      uri: http://localhost:8888
+  config:
+    import: "configserver:"
+  application:
+    name: mail-service-application
