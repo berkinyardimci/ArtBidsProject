@@ -1,8 +1,11 @@
 package com.artbids.service;
 
 import com.artbids.client.UserManager;
+import com.artbids.converter.AuctionConverter;
 import com.artbids.data.request.AddArtRequestDto;
 import com.artbids.data.request.SaveAuctionRequestDto;
+import com.artbids.data.response.AddArtResponse;
+import com.artbids.data.response.BaseResponse;
 import com.artbids.entity.Auction;
 import com.artbids.entity.AuctionItem;
 import com.artbids.exception.AuctionNameAlreadyTakenException;
@@ -14,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class AuctionService {
     private final UserManager userManager;
 
 
-    public void createAuction(SaveAuctionRequestDto dto){
+    public BaseResponse createAuction(SaveAuctionRequestDto dto){
         Long userId = userManager.getUserIdFromUserProfileWithToken(dto.getToken());
 
         if (auctionRepository.existsByName(dto.getName())){
@@ -42,29 +43,20 @@ public class AuctionService {
                 .startTime(startTime)
                 .endTime(endTime)
                 .build();
-
         auctionRepository.save(auction);
-
+        return BaseResponse.builder().build();
     }
 
-    public void addArt(Long auctionId, AddArtRequestDto dto){
+    public AddArtResponse addArt(Long auctionId, AddArtRequestDto dto){
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(() -> new AuctionNotFoundException("Müzayede bulunamadı"));
 
-        AuctionItem auctionItem = AuctionItem.builder()
-                .artistDescription(dto.getArtistDescription())
-                .artistName(dto.getArtistName())
-                .image(dto.getImage())
-                .priceIncreaseRate(dto.getPriceIncreaseRate())
-                .productDescription(dto.getProductDescription())
-                .startingPrice(dto.getStartingPrice())
-                .auction(auction)
-                .build();
+        AuctionItem auctionItem = AuctionConverter.toAuctionItem(dto);
+        auctionItem.setAuction(auction);
+        return AuctionConverter.toAddArtResponse(auctionItemRepository.save(auctionItem));
 
-        auctionItemRepository.save(auctionItem);
     }
-    //Todo: Convertor ekle
-    //Todo: Config Server kur
+
     private static LocalDateTime parseStringToDate(String userInput) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(userInput, formatter);
