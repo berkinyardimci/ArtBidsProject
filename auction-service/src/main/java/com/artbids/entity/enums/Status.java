@@ -3,6 +3,7 @@ package com.artbids.entity.enums;
 public enum Status {
 
     ACTIVE("Devam ediyor"),
+
     COMPLETED("Müzayede sona erdi"),
     PENDING("İleri tarihte başlayacak");
 
