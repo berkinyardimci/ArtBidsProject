@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder
+//@Data
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@SuperBuilder
 public class SaveAuctionResponse extends BaseResponse{
 }

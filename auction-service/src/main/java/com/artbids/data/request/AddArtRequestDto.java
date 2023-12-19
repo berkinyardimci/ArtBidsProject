@@ -17,6 +17,6 @@ public class AddArtRequestDto {
     private String artistName;
     private String artistDescription;
     private Integer priceIncreaseRate;
-    private String image;
+    private byte[] imageData;
 
 }
