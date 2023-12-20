@@ -23,7 +23,9 @@ public class AuctionItem {
     private String artistName;
     private String artistDescription;
     private Integer priceIncreaseRate;
-    private String image;
+    @Lob
+    @Column(name = "imagedata", length = 1000)
+    private byte[] imageData;
 
     @ManyToOne
     @JoinColumn(name = "auction_id")

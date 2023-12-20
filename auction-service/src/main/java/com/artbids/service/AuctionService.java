@@ -12,11 +12,15 @@ import com.artbids.exception.AuctionNameAlreadyTakenException;
 import com.artbids.exception.AuctionNotFoundException;
 import com.artbids.repository.AuctionItemRepository;
 import com.artbids.repository.AuctionRepository;
+import com.artbids.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +59,24 @@ public class AuctionService {
         auctionItem.setAuction(auction);
         return AuctionConverter.toAddArtResponse(auctionItemRepository.save(auctionItem));
 
+    }
+
+    public BaseResponse uploadImage(Long auctionItemId,MultipartFile file) throws IOException {
+        Optional<AuctionItem> byId = auctionItemRepository.findById(auctionItemId);
+        byte[] bytes = ImageUtil.compressImage(file.getBytes());
+        byId.get().setImageData(bytes);
+        auctionItemRepository.save(byId.get());
+        //auctionItemRepository.save(AuctionItem.builder()
+        //      .imageData(ImageUtil.compressImage(file.getBytes())).build());
+        return  BaseResponse.builder().build();
+    }
+
+    public byte[] getImage(Long id) {
+        Optional<AuctionItem> byId = auctionItemRepository.findById(id);
+
+        //byte[] image = ImageUtil.decompressImage(dbImage.get().getImageData());
+        byte[] image = ImageUtil.decompressImage(byId.get().getImageData());
+        return image;
     }
 
     private static LocalDateTime parseStringToDate(String userInput) {
