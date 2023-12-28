@@ -11,3 +11,5 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+auction-service:
+  auth-service-url: http://localhost:7075/user/profile

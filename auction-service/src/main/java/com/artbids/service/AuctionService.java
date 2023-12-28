@@ -1,6 +1,6 @@
 package com.artbids.service;
 
-import com.artbids.client.UserManager;
+import com.artbids.client.AuthServiceClient;
 import com.artbids.converter.AuctionConverter;
 import com.artbids.data.request.AddArtRequestDto;
 import com.artbids.data.request.SaveAuctionRequestDto;
@@ -28,11 +28,11 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
     private final AuctionItemRepository auctionItemRepository;
-    private final UserManager userManager;
+    private final AuthServiceClient authServiceClient;
 
 
     public BaseResponse createAuction(SaveAuctionRequestDto dto){
-        Long userId = userManager.getUserIdFromUserProfileWithToken(dto.getToken());
+        Long userId = authServiceClient.getUserIdFromUserProfileWithToken(dto.getToken());
 
         if (auctionRepository.existsByName(dto.getName())){
             throw new AuctionNameAlreadyTakenException("Müzayede ismi zaten kullanılıyor.");

@@ -12,25 +12,25 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/userprofile")
+@RequestMapping("/user/profile")
 public class UserProfileController {
     private final UserProfileService userProfileService;
 
-    @PostMapping("/update")
+    @PostMapping
     public ResponseEntity<UpdateUserProfileResponse> updateUserProfile(@RequestBody UpdateUserProfileRequestDto dto) {
         UpdateUserProfileResponse updateUserProfileResponse = userProfileService.updateUserProfile(dto);
         updateUserProfileResponse.setRestHeader(new RestHeader(true,"Güncelleme Başarılı",null));
         return new ResponseEntity<>(updateUserProfileResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("/all")
     public ResponseEntity<FindAllUserResponse> findAll(@RequestParam String token) {
         FindAllUserResponse response = userProfileService.findAll(token);
         response.setRestHeader(new RestHeader(true, "Userlar Listelendi",null));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/getUserIdFromToken/{token}")
+    @GetMapping("/{token}")
     public Long getUserIdFromUserProfileWithToken(@PathVariable String token){
         return userProfileService.getUserIdFromUserProfileWithToken(token);
     }
