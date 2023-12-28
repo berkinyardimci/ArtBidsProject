@@ -66,8 +66,8 @@ public class AuthController {
     }
 
     @DeleteMapping("/delete/{token}")
-    public ResponseEntity<BaseResponse> deleteProfile(@PathVariable String token) {
-        authService.deleteUserProfile(token);
+    public ResponseEntity<BaseResponse> deleteProfile(@PathVariable Long id) {
+        authService.deleteUserProfile(id);
         BaseResponse response = new BaseResponse();
         response.setRestHeader(new RestHeader(true,"Silme işlemi Başarılı",null));
         return new ResponseEntity<>(response, HttpStatus.OK);

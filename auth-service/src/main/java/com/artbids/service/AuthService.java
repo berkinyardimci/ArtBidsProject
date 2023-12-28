@@ -144,15 +144,18 @@ public class AuthService {
         return ForgetPasswordResponse.builder().build();
     }
 
-    public boolean deleteUserProfile(String token) {
+    public boolean deleteUserProfile(Long id) {
         try {
-            Auth auth = getUserProfileFromToken(token);
-            auth.setStatus(EStatus.DELETED);
-            authRepository.delete(auth);
-            return true;
+            Optional<Auth> optionalAuth = authRepository.findById(id);
+            if(optionalAuth.isPresent()){
+                authRepository.delete(optionalAuth.get());
+                optionalAuth.get().setStatus(EStatus.DELETED);
+                return true;
+            }
         } catch (Exception e) {
             throw new RuntimeException("Silme işlemi başarısız");
         }
+        return false;
     }
     private Auth getUserProfileFromToken(String token) {
         Long authId = jwtTokenManager.getAuthIdFromToken(token)
