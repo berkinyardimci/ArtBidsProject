@@ -10,7 +10,6 @@ public enum ErrorCode {
 
     AUCTION_EXCEPTION(1001,"Auction Exception");
 
-
     private final int value;
     private final String reasonPhrase;
 }

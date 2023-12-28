@@ -157,6 +157,7 @@ public class AuthService {
         }
         return false;
     }
+
     private Auth getUserProfileFromToken(String token) {
         Long authId = jwtTokenManager.getAuthIdFromToken(token)
                 .orElseThrow(() -> new UserNotFoundException("User Bulunamadı"));

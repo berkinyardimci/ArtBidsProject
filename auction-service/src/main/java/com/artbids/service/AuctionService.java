@@ -50,7 +50,6 @@ public class AuctionService {
         auctionRepository.save(auction);
         return BaseResponse.builder().build();
     }
-
     public AddArtResponse addArt(Long auctionId, AddArtRequestDto dto){
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(() -> new AuctionNotFoundException("Müzayede bulunamadı"));
