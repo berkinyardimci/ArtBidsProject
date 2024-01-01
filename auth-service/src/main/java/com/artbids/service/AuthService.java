@@ -81,11 +81,8 @@ public class AuthService {
         return auth;
     }
 
-    public UpdateUsernameResponse updateUsername(UpdateUsernameRequestDto dto) {
-        Long authId = jwtTokenManager.getAuthIdFromToken(dto.getToken())
-                .orElseThrow(() -> new UserNotFoundException("User Bulunamadı"));
-
-        Auth auth = authRepository.findById(authId)
+    public UpdateUsernameResponse updateUsername(Long id, UpdateUsernameRequestDto dto) {
+        Auth auth = authRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User Bulunamadı"));
 
         auth.setUsername(dto.getUsername());
@@ -95,18 +92,18 @@ public class AuthService {
                 .build();
     }
 
-    public UpdateEmailResponse updateEmail(UpdateEmailRequestDto dto) {
-        Auth auth = getUserProfileFromToken(dto.getToken());
+    public UpdateEmailResponse updateEmail(Long id,UpdateEmailRequestDto dto) {
+        Optional<Auth> optionalAuth = Optional.ofNullable(authRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User Bulunamadı")));
 
-
-        auth.setEmail(dto.getEmail());
-        authRepository.save(auth);
+        optionalAuth.get().setEmail(dto.getEmail());
+        authRepository.save(optionalAuth.get());
         return UpdateEmailResponse.builder()
                 .email(dto.getEmail())
                 .build();
     }
 
-    public ChangeStatusResponse changeStatusToActıve(Long id){
+    public ChangeStatusResponse changeStatusToActive(Long id){
         Optional<Auth> optionalAuth = Optional.ofNullable(authRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User Bulunamadı")));
 
@@ -121,18 +118,19 @@ public class AuthService {
         return response;
     }
 
-    public ChangePasswordResponse changePassword(ChangePasswordRequestDto dto) {
-        Auth auth = getUserProfileFromToken(dto.getToken());
+    public ChangePasswordResponse changePassword(Long id, ChangePasswordRequestDto dto) {
+        Optional<Auth> optionalAuth = Optional.ofNullable(authRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User Bulunamadı")));
 
-        if(!dto.getOldPassword().equals(auth.getPassword())){
+        if(!dto.getOldPassword().equals(optionalAuth.get().getPassword())){
             throw new PasswordNotMatchesException("Eski Şifreniz Doğru Değil");
         }
         if(!dto.getNewPassword().equals(dto.getReNewPassword())){
             throw new PasswordNotMatchesException("Yeni Şifreler uyuşmuyor");
         }
 
-        auth.setPassword(dto.getNewPassword());
-        authRepository.save(auth);
+        optionalAuth.get().setPassword(dto.getNewPassword());
+        authRepository.save(optionalAuth.get());
         return ChangePasswordResponse.builder().build();
     }
 

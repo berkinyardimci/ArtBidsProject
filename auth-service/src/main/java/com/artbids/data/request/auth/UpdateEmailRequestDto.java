@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UpdateEmailRequestDto {
 
-    private String token;
     private String email;
 }

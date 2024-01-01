@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,29 +36,19 @@ public class UserProfileService {
         }
     }
 
-    public UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequestDto dto) {
-        UserProfile userProfile = getUserProfileFromToken(dto.getToken());
-        if (!Objects.equals(userProfile.getAuth().getUsername(), dto.getUsername())) {
-            authService.updateUsername(UpdateUsernameRequestDto.builder().username(dto.getUsername()).token(dto.getToken()).build());
+    public UpdateUserProfileResponse updateUserProfile(Long id,UpdateUserProfileRequestDto dto) {
+        Optional<UserProfile> optionalUserProfile = userProfileRepository.findById(id);
+        if (!Objects.equals(optionalUserProfile.get().getAuth().getUsername(), dto.getUsername())) {
+            authService.updateUsername(id,UpdateUsernameRequestDto.builder().username(dto.getUsername()).build());
         }
-        if (!Objects.equals(userProfile.getAuth().getEmail(), dto.getEmail())) {
-            authService.updateEmail(UpdateEmailRequestDto.builder().email(dto.getEmail()).token(dto.getToken()).build());
+        if (!Objects.equals(optionalUserProfile.get().getAuth().getEmail(), dto.getEmail())) {
+            authService.updateEmail(id,UpdateEmailRequestDto.builder().email(dto.getEmail()).build());
         }
-        UserProfile updatedUserProfile = userProfileRepository.save(Convertor.toUserProfile(dto, userProfile));
+        UserProfile updatedUserProfile = userProfileRepository.save(Convertor.toUserProfile(dto, optionalUserProfile.get()));
         return Convertor.toUpdateUserProfileResponse(updatedUserProfile);
     }
 
-
-    private UserProfile getUserProfileFromToken(String token) {
-        Long authId = jwtTokenManager.getAuthIdFromToken(token)
-                .orElseThrow(() -> new UserNotFoundException("User Bulunamadı"));
-
-        return userProfileRepository.findById(authId)
-                .orElseThrow(() -> new UserNotFoundException("User Bulunamadı"));
-    }
-
-    public FindAllUserResponse findAll(String token) {
-        jwtTokenManager.verifyToken(token);
+    public FindAllUserResponse findAll() {
         List<UserProfile> activeUserProfiles = userProfileRepository
                 .findAll()
                 .stream()
@@ -66,7 +57,4 @@ public class UserProfileService {
         return Convertor.toFindAllUserResponse(activeUserProfiles);
     }
 
-    public Long getUserIdFromUserProfileWithToken(String token) {
-        return jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new InvalidTokenException("Geçersiz Token"));
-    }
 }

@@ -16,22 +16,18 @@ import org.springframework.web.bind.annotation.*;
 public class UserProfileController {
     private final UserProfileService userProfileService;
 
-    @PostMapping
-    public ResponseEntity<UpdateUserProfileResponse> updateUserProfile(@RequestBody UpdateUserProfileRequestDto dto) {
-        UpdateUserProfileResponse updateUserProfileResponse = userProfileService.updateUserProfile(dto);
-        updateUserProfileResponse.setRestHeader(new RestHeader(true,"Güncelleme Başarılı",null));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UpdateUserProfileResponse> updateUserProfile(@PathVariable Long id, @RequestBody UpdateUserProfileRequestDto dto) {
+        UpdateUserProfileResponse updateUserProfileResponse = userProfileService.updateUserProfile(id,dto);
+        updateUserProfileResponse.setRestHeader(new RestHeader(true,"Güncelleme Başarılı"));
         return new ResponseEntity<>(updateUserProfileResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<FindAllUserResponse> findAll(@RequestParam String token) {
-        FindAllUserResponse response = userProfileService.findAll(token);
-        response.setRestHeader(new RestHeader(true, "Userlar Listelendi",null));
+    public ResponseEntity<FindAllUserResponse> findAll() {
+        FindAllUserResponse response = userProfileService.findAll();
+        response.setRestHeader(new RestHeader(true, "Userlar Listelendi"));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/{token}")
-    public Long getUserIdFromUserProfileWithToken(@PathVariable String token){
-        return userProfileService.getUserIdFromUserProfileWithToken(token);
-    }
 }

@@ -1,5 +1,6 @@
 package com.artbids.controller;
 
+import com.artbids.constant.SuccessMessages;
 import com.artbids.data.RestHeader;
 import com.artbids.data.request.auth.*;
 import com.artbids.data.response.BaseResponse;
@@ -20,56 +21,56 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequestDto dto) {
         RegisterResponse response = authService.register(dto);
-        response.setRestHeader(new RestHeader(true,"Kayıt Başarılı",null));
+        response.setRestHeader(new RestHeader(true, SuccessMessages.REGISTER_SUCCESS.getMessage()));
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequestDto dto) {
         LoginResponse responseDto = authService.login(dto);
-        responseDto.setRestHeader(new RestHeader(true,"Success Login"));
+        responseDto.setRestHeader(new RestHeader(true,SuccessMessages.LOGIN_SUCCESS.getMessage()));
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping("/changeStatus/{id}")
     public ResponseEntity<ChangeStatusResponse> changeStatus(@PathVariable Long id) {
-        ChangeStatusResponse response = authService.changeStatusToActıve(id);
-        response.setRestHeader(new RestHeader(true,"Hesap Aktive Edildi",null));
+        ChangeStatusResponse response = authService.changeStatusToActive(id);
+        response.setRestHeader(new RestHeader(true,SuccessMessages.ACCOUNT_ACTIVATE_SUCCESS.getMessage()));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/updateEmail")
-    public ResponseEntity<UpdateEmailResponse> updateEmail(@RequestBody UpdateEmailRequestDto dto) {
-        UpdateEmailResponse updateEmailResponse = authService.updateEmail(dto);
-        updateEmailResponse.setRestHeader(new RestHeader(true,"Email Güncelleme Başarılı",null));
+    @PostMapping("/updateEmail/{id}")
+    public ResponseEntity<UpdateEmailResponse> updateEmail(@PathVariable Long id,@RequestBody UpdateEmailRequestDto dto) {
+        UpdateEmailResponse updateEmailResponse = authService.updateEmail(id, dto);
+        updateEmailResponse.setRestHeader(new RestHeader(true,SuccessMessages.CHANGE_EMAIL_SUCCESS.getMessage()));
         return new ResponseEntity<>(updateEmailResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/updateUsername")
-    public ResponseEntity<UpdateUsernameResponse> updateUsername(@RequestBody UpdateUsernameRequestDto dto) {
-        UpdateUsernameResponse updateUsernameResponse = authService.updateUsername(dto);
-        updateUsernameResponse.setRestHeader(new RestHeader(true,"Username Güncelleme Başarılı",null));
+    @PostMapping("/updateUsername/{id}")
+    public ResponseEntity<UpdateUsernameResponse> updateUsername(@PathVariable Long id,@RequestBody UpdateUsernameRequestDto dto) {
+        UpdateUsernameResponse updateUsernameResponse = authService.updateUsername(id,dto);
+        updateUsernameResponse.setRestHeader(new RestHeader(true,SuccessMessages.CHANGE_USERNAME_SUCCESS.getMessage()));
         return new ResponseEntity<>(updateUsernameResponse, HttpStatus.OK);
     }
-    @PostMapping("/changePassword")
-    public ResponseEntity<ChangePasswordResponse> updateEmail(@RequestBody ChangePasswordRequestDto dto) {
-        ChangePasswordResponse changePasswordresponse = authService.changePassword(dto);
-        changePasswordresponse.setRestHeader(new RestHeader(true,"Şifre Güncelleme Başarılı",null));
+    @PostMapping("/changePassword/{id}")
+    public ResponseEntity<ChangePasswordResponse> updatePassword(@PathVariable Long id,@RequestBody ChangePasswordRequestDto dto) {
+        ChangePasswordResponse changePasswordresponse = authService.changePassword(id,dto);
+        changePasswordresponse.setRestHeader(new RestHeader(true,SuccessMessages.CHANGE_PASSWORD_SUCCESS.getMessage()));
         return new ResponseEntity<>(changePasswordresponse, HttpStatus.OK);
     }
 
-    @PostMapping("/forgetpassword")
-    public ResponseEntity<ForgetPasswordResponse> updateEmail(@RequestBody ForgetPasswordRequestDto dto) {
+    @PostMapping("/forgetPassword")
+    public ResponseEntity<ForgetPasswordResponse> forgetPassword(@RequestBody ForgetPasswordRequestDto dto) {
         ForgetPasswordResponse forgetPasswordResponse = authService.forgetPassword(dto);
-        forgetPasswordResponse.setRestHeader(new RestHeader(true,"Şifre Güncelleme Başarılı",null));
+        forgetPasswordResponse.setRestHeader(new RestHeader(true,SuccessMessages.CHANGE_PASSWORD_SUCCESS.getMessage()));
         return new ResponseEntity<>(forgetPasswordResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{token}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<BaseResponse> deleteProfile(@PathVariable Long id) {
         authService.deleteUserProfile(id);
         BaseResponse response = new BaseResponse();
-        response.setRestHeader(new RestHeader(true,"Silme işlemi Başarılı",null));
+        response.setRestHeader(new RestHeader(true,SuccessMessages.DELETE_PROFILE_SUCCESS.getMessage()));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

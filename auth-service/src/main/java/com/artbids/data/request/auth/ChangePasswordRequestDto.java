@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChangePasswordRequestDto {
 
-    private String token;
     private String oldPassword;
     private String newPassword;
     private String reNewPassword;
