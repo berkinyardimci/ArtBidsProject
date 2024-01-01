@@ -39,10 +39,9 @@ public class AddArtUnitTest {
     void testAddArtGivenAuctionIdAndArtRequest_whenAddArt_thenAddArtResponse() {
         // given
         Long auctionId = 1L;
-        AddArtRequestDto artRequestDto = new AddArtRequestDto();
+        AddArtRequestDto artRequestDto = createAddArtRequestDto();
         Auction auction = new Auction();
-        AuctionItem auctionItem = AuctionConverter.toAuctionItem(artRequestDto);
-        auctionItem.setAuction(auction);
+        AuctionItem auctionItem = createAuctionItem();
 
         when(auctionRepository.findById(auctionId)).thenReturn(Optional.of(auction));
         when(auctionItemRepository.save(any(AuctionItem.class))).thenReturn(auctionItem);
@@ -52,6 +51,46 @@ public class AddArtUnitTest {
 
         // then
         assertNotNull(response);
+        assertEquals(artRequestDto.getProductName(), response.getProductName());
+        assertEquals(artRequestDto.getProductDescription(), response.getProductDescription());
+        assertEquals(artRequestDto.getStartingPrice(), response.getStartingPrice());
+        assertEquals(artRequestDto.getArtistName(), response.getArtistName());
+        assertEquals(artRequestDto.getArtistDescription(), response.getArtistDescription());
+        assertEquals(artRequestDto.getPriceIncreaseRate(), response.getPriceIncreaseRate());
+        assertArrayEquals(artRequestDto.getImageData(), response.getImageData());
+
+        verify(auctionItemRepository, times(1)).save(any(AuctionItem.class));
+    }
+
+    private AddArtRequestDto createAddArtRequestDto() {
+        AddArtRequestDto artRequestDto = new AddArtRequestDto();
+        artRequestDto.setProductName("Fake Product");
+        artRequestDto.setProductDescription("Fake Product Description");
+        artRequestDto.setStartingPrice(100);
+        artRequestDto.setArtistName("Fake Artist");
+        artRequestDto.setArtistDescription("Fake Artist Description");
+        artRequestDto.setPriceIncreaseRate(5);
+        artRequestDto.setImageData(new byte[]{1, 2, 3});
+
+        return artRequestDto;
+    }
+
+    private AuctionItem createAuctionItem() {
+        AuctionItem auctionItem = new AuctionItem();
+        auctionItem.setId(1L);
+        auctionItem.setProductName("Fake Product");
+        auctionItem.setProductDescription("Fake Product Description");
+        auctionItem.setStartingPrice(100);
+        auctionItem.setArtistName("Fake Artist");
+        auctionItem.setArtistDescription("Fake Artist Description");
+        auctionItem.setPriceIncreaseRate(5);
+        auctionItem.setImageData(new byte[]{1, 2, 3});
+
+        Auction auction = new Auction();
+        auction.setId(1L);
+        auctionItem.setAuction(auction);
+
+        return auctionItem;
     }
 
     @Test
@@ -70,5 +109,6 @@ public class AddArtUnitTest {
 
         // then
         assertNotNull(exception);
+        assertEquals("Müzayede bulunamadı", exception.getErrorMessage());
     }
 }
