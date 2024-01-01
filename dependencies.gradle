@@ -11,23 +11,25 @@ ext {
     ]
 
     libs = [
-            springBootWeb                   : "org.springframework.boot:spring-boot-starter-web:$versions.springBoot",
-            springBootJpa                   : "org.springframework.boot:spring-boot-starter-data-jpa:$versions.springBoot",
-            springBootValidation            : "org.springframework.boot:spring-boot-starter-validation:$versions.springBoot",
-            springBootMailSender            : "org.springframework.boot:spring-boot-starter-mail:$versions.springBoot",
-            postgresql                      : "org.postgresql:postgresql:$versions.postgresql",
-            lombok                          : "org.projectlombok:lombok:$versions.lombok",
-            openapi                         : "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0",
-            javaJwt                         : "com.auth0:java-jwt:$versions.jwt",
+            springBootWeb           : "org.springframework.boot:spring-boot-starter-web:$versions.springBoot",
+            springBootJpa           : "org.springframework.boot:spring-boot-starter-data-jpa:$versions.springBoot",
+            springBootValidation    : "org.springframework.boot:spring-boot-starter-validation:$versions.springBoot",
+            springBootMailSender    : "org.springframework.boot:spring-boot-starter-mail:$versions.springBoot",
+            postgresql              : "org.postgresql:postgresql:$versions.postgresql",
+            lombok                  : "org.projectlombok:lombok:$versions.lombok",
+            openapi                 : "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0",
+            javaJwt                 : "com.auth0:java-jwt:$versions.jwt",
 
-            springCloudOpenFeign            : "org.springframework.cloud:spring-cloud-starter-openfeign:$versions.springCloud",
-            springCloudConfigStarter        : "org.springframework.cloud:spring-cloud-starter-config:$versions.springCloud",
-            springCloudConfigClient         : "org.springframework.cloud:spring-cloud-config-client:$versions.springCloud",
-            springCloudConfigServer         : "org.springframework.cloud:spring-cloud-config-server:$versions.springCloud",
+            springCloudOpenFeign    : "org.springframework.cloud:spring-cloud-starter-openfeign:$versions.springCloud",
+            springCloudConfigStarter: "org.springframework.cloud:spring-cloud-starter-config:$versions.springCloud",
+            springCloudConfigClient : "org.springframework.cloud:spring-cloud-config-client:$versions.springCloud",
+            springCloudConfigServer : "org.springframework.cloud:spring-cloud-config-server:$versions.springCloud",
 
-            kafkaImplementation             : "org.apache.kafka:kafka-clients:$versions.kafka",
-            kafkaSpring                     : 'org.springframework.kafka:spring-kafka:3.0.12',
-            freemaker                       : 'org.springframework.boot:spring-boot-starter-freemarker'
+            kafkaImplementation     : "org.apache.kafka:kafka-clients:$versions.kafka",
+            kafkaSpring             : 'org.springframework.kafka:spring-kafka:3.0.12',
+            freemaker               : 'org.springframework.boot:spring-boot-starter-freemarker',
+            test                    : "org.springframework.boot:spring-boot-starter-test:$versions.springBoot",
+
 
     ]
 }
