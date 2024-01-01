@@ -1,6 +1,5 @@
 package com.artbids.service;
 
-import com.artbids.client.AuthServiceClient;
 import com.artbids.converter.AuctionConverter;
 import com.artbids.data.request.AddArtRequestDto;
 import com.artbids.data.request.SaveAuctionRequestDto;
@@ -14,7 +13,9 @@ import com.artbids.repository.AuctionItemRepository;
 import com.artbids.repository.AuctionRepository;
 import com.artbids.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -28,11 +29,9 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
     private final AuctionItemRepository auctionItemRepository;
-    private final AuthServiceClient authServiceClient;
 
 
-    public BaseResponse createAuction(SaveAuctionRequestDto dto){
-        Long userId = authServiceClient.getUserIdFromUserProfileWithToken(dto.getToken());
+    public BaseResponse createAuction(Long id, SaveAuctionRequestDto dto){
 
         if (auctionRepository.existsByName(dto.getName())){
             throw new AuctionNameAlreadyTakenException("Müzayede ismi zaten kullanılıyor.");
@@ -41,7 +40,7 @@ public class AuctionService {
         LocalDateTime endTime = parseStringToDate(dto.getEndTime());
 
         Auction auction = Auction.builder()
-                .ownerId(userId)
+                .ownerId(id)
                 .auctionDescription(dto.getAuctionDescription())
                 .name(dto.getName())
                 .startTime(startTime)

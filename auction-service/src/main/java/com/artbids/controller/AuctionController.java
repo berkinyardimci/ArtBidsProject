@@ -23,9 +23,9 @@ public class AuctionController {
 
     private final AuctionService auctionService;
 
-    @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestBody SaveAuctionRequestDto dto) {
-        auctionService.createAuction(dto);
+    @PostMapping("/save/{userProfileId}")
+    public ResponseEntity<String> save(@PathVariable Long userProfileId,@RequestBody SaveAuctionRequestDto dto) {
+        auctionService.createAuction(userProfileId,dto);
         return new ResponseEntity<>("Başarılı", HttpStatus.CREATED);
     }
 
