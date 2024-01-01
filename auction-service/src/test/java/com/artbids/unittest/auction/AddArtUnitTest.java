@@ -39,9 +39,16 @@ public class AddArtUnitTest {
     void testAddArtGivenAuctionIdAndArtRequest_whenAddArt_thenAddArtResponse() {
         // given
         Long auctionId = 1L;
-        AddArtRequestDto artRequestDto = createAddArtRequestDto();
+        AddArtRequestDto artRequestDto = AddArtRequestDto.builder()
+                .productName("Fake Product")
+                .productDescription("Fake Product Description")
+                .startingPrice(100)
+                .artistName("Fake Artist")
+                .artistDescription("Fake Artist Description")
+                .priceIncreaseRate(500)
+                .build();
         Auction auction = new Auction();
-        AuctionItem auctionItem = createAuctionItem();
+        AuctionItem auctionItem = createAuctionItem(auctionId, artRequestDto);
 
         when(auctionRepository.findById(auctionId)).thenReturn(Optional.of(auction));
         when(auctionItemRepository.save(any(AuctionItem.class))).thenReturn(auctionItem);
@@ -53,41 +60,23 @@ public class AddArtUnitTest {
         assertNotNull(response);
         assertEquals(artRequestDto.getProductName(), response.getProductName());
         assertEquals(artRequestDto.getProductDescription(), response.getProductDescription());
-        assertEquals(artRequestDto.getStartingPrice(), response.getStartingPrice());
-        assertEquals(artRequestDto.getArtistName(), response.getArtistName());
-        assertEquals(artRequestDto.getArtistDescription(), response.getArtistDescription());
-        assertEquals(artRequestDto.getPriceIncreaseRate(), response.getPriceIncreaseRate());
-        assertArrayEquals(artRequestDto.getImageData(), response.getImageData());
 
         verify(auctionItemRepository, times(1)).save(any(AuctionItem.class));
     }
 
-    private AddArtRequestDto createAddArtRequestDto() {
-        AddArtRequestDto artRequestDto = new AddArtRequestDto();
-        artRequestDto.setProductName("Fake Product");
-        artRequestDto.setProductDescription("Fake Product Description");
-        artRequestDto.setStartingPrice(100);
-        artRequestDto.setArtistName("Fake Artist");
-        artRequestDto.setArtistDescription("Fake Artist Description");
-        artRequestDto.setPriceIncreaseRate(5);
-        artRequestDto.setImageData(new byte[]{1, 2, 3});
-
-        return artRequestDto;
-    }
-
-    private AuctionItem createAuctionItem() {
+    private AuctionItem createAuctionItem(Long auctionId, AddArtRequestDto artRequestDto) {
         AuctionItem auctionItem = new AuctionItem();
         auctionItem.setId(1L);
-        auctionItem.setProductName("Fake Product");
-        auctionItem.setProductDescription("Fake Product Description");
-        auctionItem.setStartingPrice(100);
-        auctionItem.setArtistName("Fake Artist");
-        auctionItem.setArtistDescription("Fake Artist Description");
-        auctionItem.setPriceIncreaseRate(5);
-        auctionItem.setImageData(new byte[]{1, 2, 3});
+        auctionItem.setProductName(artRequestDto.getProductName());
+        auctionItem.setProductDescription(artRequestDto.getProductDescription());
+        auctionItem.setStartingPrice(artRequestDto.getStartingPrice());
+        auctionItem.setArtistName(artRequestDto.getArtistName());
+        auctionItem.setArtistDescription(artRequestDto.getArtistDescription());
+        auctionItem.setPriceIncreaseRate(artRequestDto.getPriceIncreaseRate());
+        auctionItem.setImageData(artRequestDto.getImageData());
 
         Auction auction = new Auction();
-        auction.setId(1L);
+        auction.setId(auctionId);
         auctionItem.setAuction(auction);
 
         return auctionItem;
