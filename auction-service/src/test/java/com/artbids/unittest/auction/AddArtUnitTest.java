@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -53,6 +54,7 @@ public class AddArtUnitTest {
         when(auctionRepository.findById(auctionId)).thenReturn(Optional.of(auction));
         when(auctionItemRepository.save(any(AuctionItem.class))).thenReturn(auctionItem);
 
+
         // when
         AddArtResponse response = auctionService.addArt(auctionId, artRequestDto);
 
@@ -73,7 +75,6 @@ public class AddArtUnitTest {
         auctionItem.setArtistName(artRequestDto.getArtistName());
         auctionItem.setArtistDescription(artRequestDto.getArtistDescription());
         auctionItem.setPriceIncreaseRate(artRequestDto.getPriceIncreaseRate());
-        auctionItem.setImageData(artRequestDto.getImageData());
 
         Auction auction = new Auction();
         auction.setId(auctionId);

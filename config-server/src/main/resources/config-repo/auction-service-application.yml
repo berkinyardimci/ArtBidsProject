@@ -1,5 +1,5 @@
 server:
-  port: 7074
+  port: 9091
 spring:
   datasource:
     username: postgres

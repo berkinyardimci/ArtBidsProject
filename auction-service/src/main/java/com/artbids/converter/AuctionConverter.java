@@ -31,7 +31,6 @@ public class AuctionConverter {
                     .artistName(addArtRequestDto.getArtistName())
                     .artistDescription(addArtRequestDto.getArtistDescription())
                     .priceIncreaseRate(addArtRequestDto.getPriceIncreaseRate())
-                    .imageData(addArtRequestDto.getImageData())
                     .build();
         }
         return null;

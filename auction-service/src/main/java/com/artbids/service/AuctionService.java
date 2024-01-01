@@ -49,25 +49,36 @@ public class AuctionService {
         auctionRepository.save(auction);
         return BaseResponse.builder().build();
     }
-    public AddArtResponse addArt(Long auctionId, AddArtRequestDto dto){
+    public AddArtResponse addArt(Long auctionId,AddArtRequestDto dto,MultipartFile file ){
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(() -> new AuctionNotFoundException("Müzayede bulunamadı"));
 
+        byte[] bytes = convertImage(file);
+
         AuctionItem auctionItem = AuctionConverter.toAuctionItem(dto);
+        auctionItem.setImageData(bytes);
         auctionItem.setAuction(auction);
         return AuctionConverter.toAddArtResponse(auctionItemRepository.save(auctionItem));
 
     }
 
+    public byte[] convertImage(MultipartFile file){
+        byte[] bytes = new byte[0];
+        try {
+            bytes = ImageUtil.compressImage(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return bytes;
+    }
     public BaseResponse uploadImage(Long auctionItemId,MultipartFile file) throws IOException {
         Optional<AuctionItem> byId = auctionItemRepository.findById(auctionItemId);
         byte[] bytes = ImageUtil.compressImage(file.getBytes());
         byId.get().setImageData(bytes);
         auctionItemRepository.save(byId.get());
-        //auctionItemRepository.save(AuctionItem.builder()
-        //      .imageData(ImageUtil.compressImage(file.getBytes())).build());
         return  BaseResponse.builder().build();
     }
+
 
     public byte[] getImage(Long id) {
         Optional<AuctionItem> byId = auctionItemRepository.findById(id);
