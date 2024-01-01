@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,5 @@ public class AddArtRequestDto {
     private String artistName;
     private String artistDescription;
     private Integer priceIncreaseRate;
-    private byte[] imageData;
 
 }
